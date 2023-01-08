@@ -5,6 +5,7 @@ const GlobalStyle = createGlobalStyle`
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  outline: none;
 }
 
 body {
@@ -14,6 +15,20 @@ body {
 a {
   text-decoration: none;
   color: #000;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  
+}
+
+#root {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  /* min-height: 100%; */
 }
 `;
 
