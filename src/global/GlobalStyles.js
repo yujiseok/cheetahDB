@@ -10,11 +10,12 @@ const GlobalStyle = createGlobalStyle`
 
 body {
   font-family: 'Ubuntu', sans-serif;
+  color: #111;
 }
 
 a {
   text-decoration: none;
-  color: #000;
+  color: #111;
 }
 
 button {
@@ -26,6 +27,12 @@ button {
 
 input {
   font-family: inherit;
+}
+
+ul, li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 #root {
