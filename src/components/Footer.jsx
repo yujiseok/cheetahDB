@@ -24,7 +24,7 @@ const Footer = () => {
 export default Footer;
 
 const StyledFooter = styled.footer`
-  border-top: 1px solid lightgray;
+  border-top: 1px solid #e5e5e5;
 `;
 
 const Container = styled.div`
