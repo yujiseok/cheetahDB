@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { FaGithub } from "react-icons/fa";
-import { Link } from "react-router-dom";
 
 const Footer = () => {
   const year = new Date().getFullYear();

@@ -21,7 +21,11 @@ button {
   border: none;
   background-color: transparent;
   cursor: pointer;
-  
+  font-family: inherit;
+}
+
+input {
+  font-family: inherit;
 }
 
 #root {
