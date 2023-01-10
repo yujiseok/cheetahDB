@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { MdOutlineClose } from "react-icons/md";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { instance } from "../../api/api";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
-const Modal = ({ setToggle, setAuth, setSession }) => {
+const Modal = ({ setToggle, setAuth, setSession, setUserId }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
@@ -62,9 +63,8 @@ const Modal = ({ setToggle, setAuth, setSession }) => {
         },
       });
 
-      console.log(sessionRes);
-
       if (res.status === 200 && sessionRes.status === 200) {
+        setUserId(username);
         setAuth((prev) => !prev);
         setSession(sessionRes.data.session_id);
         setToggle();
@@ -213,7 +213,7 @@ const Form = styled.form`
     padding: 0.75rem;
     border-radius: 6px;
     width: 100%;
-    border: 1px solid lightgray;
+    border: 1px solid #e5e5e5;
 
     &:nth-of-type(2) {
       margin: 0.5rem 0;
@@ -231,6 +231,8 @@ const Btn = styled.button`
 `;
 
 const BtnWrapper = styled.div`
+  text-align: center;
+
   p {
     font-size: 0.875rem;
     margin-bottom: 0.5rem;
