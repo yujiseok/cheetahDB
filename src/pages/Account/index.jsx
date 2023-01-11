@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { instance } from "../../api/api";
 import UserMovieList from "../../components/UserMovieList";
@@ -55,11 +54,7 @@ const Account = () => {
       </section>
       <ListSection>
         {types.map((type) => (
-          <UserMovieList
-            title={type.title}
-            key={types.title}
-            type={type.type}
-          />
+          <UserMovieList title={type.title} key={type.title} type={type.type} />
         ))}
       </ListSection>
     </Container>

@@ -4,14 +4,17 @@ import styled from "styled-components";
 import { instance } from "../api/api";
 import { mobile, tablet } from "../global/responsive";
 import MovieCard from "./MovieCard";
+import Spinner from "./Spinner";
 
 const UserMovieList = ({ title, type }) => {
   const userId = JSON.parse(localStorage.getItem("userId"));
   const sessionId = JSON.parse(localStorage.getItem("session"));
   const [movieList, setMovieList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getMovieList = async () => {
+      setIsLoading(true);
       try {
         const res = await instance.get(
           `/account/${userId}/${type}/movies?&session_id=${sessionId}&sort_by=created_at.desc&page=1`,
@@ -22,9 +25,12 @@ const UserMovieList = ({ title, type }) => {
       } catch (error) {
         console.log(error);
       }
+      setIsLoading(false);
     };
     getMovieList();
   }, []);
+
+  console.log(isLoading);
 
   return (
     <div>
@@ -37,15 +43,16 @@ const UserMovieList = ({ title, type }) => {
         </div>
       </TitleWrapper>
       <MovieList length={movieList.length}>
-        {movieList.length > 0 ? (
-          movieList.slice(0, 5).map((movie) => <MovieCard movie={movie} />)
-        ) : (
-          <Title center="center">{title} 목록이 비었습니다!</Title>
-        )}
+        {movieList.slice(0, 5).map((movie) => (
+          <MovieCard movie={movie} key={movie.id} />
+        ))}
         {movieList.length > 0 ? (
           <MoreWrapper>
             <Link to={`/account/${type}`}>더보기</Link>
           </MoreWrapper>
+        ) : null}
+        {movieList.length < 1 ? (
+          <Title center="center">{title} 목록이 비었습니다!</Title>
         ) : null}
       </MovieList>
     </div>
