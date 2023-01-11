@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { MdOutlineClose } from "react-icons/md";
 import { motion } from "framer-motion";
-import { useDispatch } from "react-redux";
 import { instance } from "../../api/api";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
@@ -11,8 +10,6 @@ const Modal = ({ setToggle, setAuth, setSession, setUserId }) => {
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
   const modalRef = useRef();
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
