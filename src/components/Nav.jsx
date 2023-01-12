@@ -154,8 +154,10 @@ const Button = styled.button`
 `;
 
 const StyledLink = styled(Link)`
+  display: inline-block;
+
   svg {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
   }
 `;
