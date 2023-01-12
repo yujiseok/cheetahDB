@@ -10,6 +10,7 @@ import "../global/slick.css";
 
 const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
   <TfiArrowCircleLeft
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...props}
     className={`slick-prev slick-arrow${
       currentSlide === 0 ? " slick-disabled" : ""
@@ -20,6 +21,7 @@ const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
 );
 const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
   <TfiArrowCircleRight
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...props}
     className={`slick-next slick-arrow${
       currentSlide === slideCount - 1 ? " slick-disabled" : ""
@@ -45,7 +47,6 @@ const Row = ({ title, fetchUrl }) => {
   const fetchMovie = async () => {
     const response = await instance.get(fetchUrl);
     setMovies(response.data.results);
-    console.log(response.data.results);
   };
 
   useEffect(() => {
@@ -73,7 +74,9 @@ const Row = ({ title, fetchUrl }) => {
                   <p className="year">
                     {(movie.first_air_date || movie.release_date)?.substr(0, 4)}
                   </p>
-                  <p className="average">평균★{movie.vote_average}</p>
+                  <p className="average">
+                    평균★{Math.round(movie.vote_average * 100) / 100}
+                  </p>
                 </Info>
               </Link>
             </Slide>
