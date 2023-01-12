@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { MdOutlineAccountCircle, MdOutlineSearch } from "react-icons/md";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import ModalPortal from "./Modal/ModalPortal";
 import Modal from "./Modal/Modal";
@@ -12,6 +12,9 @@ const NavBar = () => {
   const [toggle, setToggle] = useToggle();
   const [auth, setAuth] = useLocalStorage("auth", false);
   const [session, setSession] = useLocalStorage("session", null);
+  const [userId, setUserId] = useLocalStorage("userId", "");
+  const [searchTerm, setSearchTerm] = useState("");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,20 +29,31 @@ const NavBar = () => {
   const logout = () => {
     setAuth(false);
     setSession(null);
+    setUserId("");
     navigate("/");
+  };
+
+  const handleChange = (e) => {
+    setSearchTerm(e.target.value);
+    navigate(`/search?q=${e.target.value}`);
   };
 
   return (
     <StyledNav>
       <Container>
         <Logo>
-          <Link to="/">Home</Link>
+          <Link to="/">CheetahDB</Link>
         </Logo>
 
         <RightWrapper>
           <SearchWrapper>
             <MdOutlineSearch />
-            <SearchBar type="text" id="search" />
+            <SearchBar
+              type="text"
+              id="search"
+              value={searchTerm}
+              onChange={handleChange}
+            />
           </SearchWrapper>
           {auth && session ? (
             <>
@@ -63,6 +77,7 @@ const NavBar = () => {
                   auth={auth}
                   setAuth={setAuth}
                   setSession={setSession}
+                  setUserId={setUserId}
                 />
               </ModalPortal>
             ) : null}
@@ -82,7 +97,7 @@ const StyledNav = styled.nav`
   top: 0;
   left: 0;
   z-index: 10;
-  border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid #e5e5e5;
 `;
 
 const Container = styled.div`
@@ -98,6 +113,11 @@ const Container = styled.div`
 const Logo = styled.h1`
   font-size: 1.5rem;
   font-weight: 600;
+  color: #fdd007;
+
+  a {
+    color: inherit;
+  }
 `;
 
 const RightWrapper = styled.div`
@@ -120,14 +140,14 @@ const SearchWrapper = styled.div`
 
 const SearchBar = styled.input`
   padding: 0.25rem 1.5rem;
-  border: 1px solid lightgray;
-  background-color: lightgray;
+  border: 1px solid #e5e5e5;
+  background-color: #e5e5e5;
   min-height: 30px;
   width: 250px;
 `;
 
 const Button = styled.button`
-  border: 1px solid #000;
+  border: 1px solid #111;
   border-radius: 4px;
   padding: 0.25rem 0.5rem;
   min-height: 30px;

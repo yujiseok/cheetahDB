@@ -2,11 +2,32 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Slider from "react-slick";
 import { TfiArrowCircleLeft, TfiArrowCircleRight } from "react-icons/tfi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { instance } from "../api/api";
 
 import "../global/slick-theme.css";
 import "../global/slick.css";
+
+const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
+  <TfiArrowCircleLeft
+    {...props}
+    className={`slick-prev slick-arrow${
+      currentSlide === 0 ? " slick-disabled" : ""
+    }`}
+    aria-hidden="true"
+    aria-disabled={currentSlide === 0}
+  />
+);
+const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
+  <TfiArrowCircleRight
+    {...props}
+    className={`slick-next slick-arrow${
+      currentSlide === slideCount - 1 ? " slick-disabled" : ""
+    }`}
+    aria-hidden="true"
+    aria-disabled={currentSlide === slideCount - 1}
+  />
+);
 
 const Row = ({ title, fetchUrl }) => {
   const [movies, setMovies] = useState([]);
@@ -17,13 +38,14 @@ const Row = ({ title, fetchUrl }) => {
     speed: 800,
     slidesToShow: 5,
     slidesToScroll: 5,
-    nextArrow: <TfiArrowCircleRight />,
-    prevArrow: <TfiArrowCircleLeft />,
+    nextArrow: <SlickArrowRight />,
+    prevArrow: <SlickArrowLeft />,
   };
 
   const fetchMovie = async () => {
     const response = await instance.get(fetchUrl);
     setMovies(response.data.results);
+    console.log(response.data.results);
   };
 
   useEffect(() => {
@@ -37,21 +59,23 @@ const Row = ({ title, fetchUrl }) => {
       <Slider {...settings}>
         {movies.map((movie, i) => {
           return (
-            <Slide key={movie.id} onClick={() => navigate(`/${movie.id}`)}>
-              <ImgContainer>
-                <img
-                  src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                  alt={movie.name}
-                />
-                <div>{i + 1}</div>
-              </ImgContainer>
-              <Info>
-                <h3>{movie.title}</h3>
-                <p className="year">
-                  {(movie.first_air_date || movie.release_date).substr(0, 4)}
-                </p>
-                <p className="average">평균★{movie.vote_average}</p>
-              </Info>
+            <Slide key={movie.id}>
+              <Link to={`/movie/${movie.id}`}>
+                <ImgContainer>
+                  <img
+                    src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                    alt={movie.name}
+                  />
+                  <div>{i + 1}</div>
+                </ImgContainer>
+                <Info>
+                  <h3>{movie.title}</h3>
+                  <p className="year">
+                    {(movie.first_air_date || movie.release_date)?.substr(0, 4)}
+                  </p>
+                  <p className="average">평균★{movie.vote_average}</p>
+                </Info>
+              </Link>
             </Slide>
           );
         })}
