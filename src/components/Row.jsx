@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Slider from "react-slick";
 import { TfiArrowCircleLeft, TfiArrowCircleRight } from "react-icons/tfi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { instance } from "../api/api";
 
 import "../global/slick-theme.css";
@@ -45,6 +45,7 @@ const Row = ({ title, fetchUrl }) => {
   const fetchMovie = async () => {
     const response = await instance.get(fetchUrl);
     setMovies(response.data.results);
+    console.log(response.data.results);
   };
 
   useEffect(() => {
@@ -58,21 +59,23 @@ const Row = ({ title, fetchUrl }) => {
       <Slider {...settings}>
         {movies.map((movie, i) => {
           return (
-            <Slide key={movie.id} onClick={() => navigate(`/${movie.id}`)}>
-              <ImgContainer>
-                <img
-                  src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                  alt={movie.name}
-                />
-                <div>{i + 1}</div>
-              </ImgContainer>
-              <Info>
-                <h3>{movie.title}</h3>
-                <p className="year">
-                  {(movie.first_air_date || movie.release_date)?.substr(0, 4)}
-                </p>
-                <p className="average">평균★{movie.vote_average}</p>
-              </Info>
+            <Slide key={movie.id}>
+              <Link to="/movie/:movieId">
+                <ImgContainer>
+                  <img
+                    src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                    alt={movie.name}
+                  />
+                  <div>{i + 1}</div>
+                </ImgContainer>
+                <Info>
+                  <h3>{movie.title}</h3>
+                  <p className="year">
+                    {(movie.first_air_date || movie.release_date)?.substr(0, 4)}
+                  </p>
+                  <p className="average">평균★{movie.vote_average}</p>
+                </Info>
+              </Link>
             </Slide>
           );
         })}

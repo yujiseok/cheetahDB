@@ -15,10 +15,17 @@ const DetailPage = () => {
       try {
         const response = await instance.get(`movie/${movieId}`);
         setMovie(response.data);
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     }
     fetchData();
   }, [movieId]);
+
+  const getSimilarMovie = async () => {
+    const response = await instance.get(fetchSimilarMovie);
+    set;
+  };
 
   // const fetchReview = async () => {
   //   const response = await instance.get(requests.fetchReview);
