@@ -45,6 +45,7 @@ const Row = ({ title, fetchUrl }) => {
   const fetchMovie = async () => {
     const response = await instance.get(fetchUrl);
     setMovies(response.data.results);
+    console.log(response.data.results);
   };
 
   useEffect(() => {
