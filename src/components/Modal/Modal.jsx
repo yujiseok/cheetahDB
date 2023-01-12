@@ -4,12 +4,14 @@ import { MdOutlineClose } from "react-icons/md";
 import { motion } from "framer-motion";
 import { instance } from "../../api/api";
 import useLocalStorage from "../../hooks/useLocalStorage";
+import Spinner from "../Spinner";
 
 const Modal = ({ setToggle, setAuth, setSession, setUserId }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
   const modalRef = useRef();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -42,6 +44,7 @@ const Modal = ({ setToggle, setAuth, setSession, setUserId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const res = await instance.request({
         url: "/authentication/token/validate_with_login",
@@ -65,6 +68,7 @@ const Modal = ({ setToggle, setAuth, setSession, setUserId }) => {
         setAuth((prev) => !prev);
         setSession(sessionRes.data.session_id);
         setToggle();
+        setIsLoading(false);
       }
     } catch (error) {
       throw new Error(error.message);
@@ -77,80 +81,84 @@ const Modal = ({ setToggle, setAuth, setSession, setUserId }) => {
       animate="visible"
       variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
     >
-      <StyledModal
-        ref={modalRef}
-        initial={{
-          opacity: 0,
-          scale: 0.75,
-        }}
-        animate={{
-          opacity: 1,
-          scale: 1,
-          transition: {
-            ease: "easeOut",
-            duration: 0.15,
-          },
-        }}
-        exit={{
-          opacity: 0,
-          scale: 0.75,
-          transition: {
-            ease: "easeIn",
-            duration: 0.15,
-          },
-        }}
-      >
-        <ModalHeader>
-          <CloseBtn type="button" onClick={setToggle}>
-            <MdOutlineClose />
-          </CloseBtn>
-        </ModalHeader>
-        <ModalBody>
-          <Title>로그인</Title>
-          <Form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              id="username"
-              placeholder="아이디"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              // {...register("email")}
-            />
-            <input
-              type="password"
-              id="password"
-              placeholder="비밀번호"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              // {...register("password")}
-            />
-            <input
-              type="text"
-              id="token"
-              placeholder="토큰"
-              // {...register("token")}
-              readOnly
-              value={token}
-            />
-            <Btn type="submit">로그인</Btn>
-          </Form>
-          <BtnWrapper>
-            <p>로그인을 위한 토큰 생성 및 인증</p>
-            <button type="button" onClick={getToken}>
-              토큰생성
-            </button>
-            {token ? (
-              <a
-                href={`https://www.themoviedb.org/authenticate/${token}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                인증
-              </a>
-            ) : null}
-          </BtnWrapper>
-        </ModalBody>
-      </StyledModal>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <StyledModal
+          ref={modalRef}
+          initial={{
+            opacity: 0,
+            scale: 0.75,
+          }}
+          animate={{
+            opacity: 1,
+            scale: 1,
+            transition: {
+              ease: "easeOut",
+              duration: 0.15,
+            },
+          }}
+          exit={{
+            opacity: 0,
+            scale: 0.75,
+            transition: {
+              ease: "easeIn",
+              duration: 0.15,
+            },
+          }}
+        >
+          <ModalHeader>
+            <CloseBtn type="button" onClick={setToggle}>
+              <MdOutlineClose />
+            </CloseBtn>
+          </ModalHeader>
+          <ModalBody>
+            <Title>로그인</Title>
+            <Form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                id="username"
+                placeholder="아이디"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                // {...register("email")}
+              />
+              <input
+                type="password"
+                id="password"
+                placeholder="비밀번호"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                // {...register("password")}
+              />
+              <input
+                type="text"
+                id="token"
+                placeholder="토큰"
+                // {...register("token")}
+                readOnly
+                value={token}
+              />
+              <Btn type="submit">로그인</Btn>
+            </Form>
+            <BtnWrapper>
+              <p>로그인을 위한 토큰 생성 및 인증</p>
+              <button type="button" onClick={getToken}>
+                토큰생성
+              </button>
+              {token ? (
+                <a
+                  href={`https://www.themoviedb.org/authenticate/${token}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  인증
+                </a>
+              ) : null}
+            </BtnWrapper>
+          </ModalBody>
+        </StyledModal>
+      )}
     </ModalOverlay>
   );
 };

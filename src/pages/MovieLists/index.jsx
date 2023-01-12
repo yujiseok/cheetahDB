@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import ReactPaginate from "react-paginate";
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import { instance } from "../../api/api";
 import MovieCard from "../../components/MovieCard";
 import Spinner from "../../components/Spinner";
 import { mobile, tablet } from "../../global/responsive";
 
 const MovieLists = () => {
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+
   const { type } = useParams();
 
   const userId = JSON.parse(localStorage.getItem("userId"));
@@ -26,15 +31,18 @@ const MovieLists = () => {
     }
   };
 
+  const title = titleSelector(type);
+
   useEffect(() => {
     const getMovieList = async () => {
       try {
         const res = await instance.request({
-          url: `/account/${userId}/${type}/movies?&session_id=${sessionId}&sort_by=created_at.desc&page=1`,
+          url: `/account/${userId}/${type}/movies?&session_id=${sessionId}&sort_by=created_at.desc&page=${pageNumber}`,
           method: "get",
         });
 
         if (res.status === 200) {
+          setTotalPages(res.data.total_pages);
           setMovieList(res.data.results);
         }
       } catch (error) {
@@ -44,9 +52,9 @@ const MovieLists = () => {
     getMovieList();
   }, []);
 
-  console.log(movieList);
-
-  const title = titleSelector(type);
+  const changePage = ({ selected }) => {
+    setPageNumber(selected + 1);
+  };
 
   return (
     <Container>
@@ -54,11 +62,26 @@ const MovieLists = () => {
       {/* <Spinner /> */}
       <CardWrapper length={movieList.length}>
         {movieList.length > 0 ? (
-          movieList.map((movie) => <MovieCard movie={movie} />)
+          movieList.map((movie) => <MovieCard movie={movie} key={movie.id} />)
         ) : (
           <Title>{title} 목록이 비었습니다!</Title>
         )}
       </CardWrapper>
+
+      {totalPages > 1 ? (
+        <ReactPaginate
+          previousLabel={<HiChevronLeft />}
+          nextLabel={<HiChevronRight />}
+          pageCount={totalPages}
+          onPageChange={changePage}
+          containerClassName="pagination-container"
+          pageLinkClassName="btn"
+          previousLinkClassName="prevBtn"
+          nextLinkClassName="nextBtn"
+          disabledClassName="disabled"
+          activeClassName="active"
+        />
+      ) : null}
     </Container>
   );
 };
