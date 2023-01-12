@@ -88,13 +88,17 @@ const DetailPage = () => {
         <CastInfoContainer>
           <h2>출연/제작</h2>
           <CastlistContainer>
-            {credits.map((credit) => (
+            {credits.slice(0, 8).map((credit) => (
               <div key={credit.cast_id}>
                 <img
                   src={`https://image.tmdb.org/t/p/w300${credit.profile_path}`}
                   alt={credit.name}
                 />
-                <p>{credit.character}</p>
+                <div className="castlistInfo">
+                  <p>
+                    {credit.original_name} <span>|</span> {credit.character}역
+                  </p>
+                </div>
               </div>
             ))}
           </CastlistContainer>
@@ -174,11 +178,20 @@ const MovieInfoContainer = styled.div`
 
 const CastlistContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  padding: 2rem;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 2rem 0;
+  row-gap: 1.25rem;
+  margin: o auto;
+  p {
+    font-size: 0.875rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1; /*만들고 싶은 줄 수, 2줄까지 보여지게 하려면 2를 입력한다*/
+    overflow: hidden;
+  }
   div {
-    width: 18.75rem;
     height: 5rem;
+    /* display: flex; */
   }
 `;
 
@@ -187,7 +200,6 @@ const CastInfoContainer = styled.div`
   padding: 2rem;
   img {
     object-fit: cover;
-    /* width: 100%; */
     border-radius: 50%;
     width: 3.125rem;
     height: 3.125rem;
