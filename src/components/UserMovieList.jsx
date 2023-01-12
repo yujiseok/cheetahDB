@@ -10,11 +10,9 @@ const UserMovieList = ({ title, type }) => {
   const userId = JSON.parse(localStorage.getItem("userId"));
   const sessionId = JSON.parse(localStorage.getItem("session"));
   const [movieList, setMovieList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getMovieList = async () => {
-      setIsLoading(true);
       try {
         const res = await instance.get(
           `/account/${userId}/${type}/movies?&session_id=${sessionId}&sort_by=created_at.desc&page=1`,
@@ -25,12 +23,9 @@ const UserMovieList = ({ title, type }) => {
       } catch (error) {
         console.log(error);
       }
-      setIsLoading(false);
     };
     getMovieList();
   }, []);
-
-  console.log(isLoading);
 
   return (
     <div>

@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import DetailPage from "./pages/DetailPage";
 import MovieLists from "./pages/MovieLists";
 import Search from "./pages/Search";
+import PrivateRoute from "./components/route/PrivateRoute";
 
 const App = () => {
   return (
@@ -12,8 +13,22 @@ const App = () => {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/account/:type" element={<MovieLists />} />
+          <Route
+            path="/account"
+            element={
+              <PrivateRoute>
+                <Account />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/account/:type"
+            element={
+              <PrivateRoute>
+                <MovieLists />
+              </PrivateRoute>
+            }
+          />
           <Route path="/movie/:movieId" element={<DetailPage />} />
           <Route path="/search" element={<Search />} />
         </Route>

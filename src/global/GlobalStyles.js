@@ -38,8 +38,7 @@ ul, li {
 #root {
   height: 100vh;
   display: grid;
-  grid-template-rows: auto 1fr auto;
-  /* min-height: 100%; */
+  grid-template-rows: 1fr auto auto;
 }
 
 .pagination-container{
