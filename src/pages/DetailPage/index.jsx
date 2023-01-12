@@ -1,6 +1,5 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { instance } from "../../api/api";
 import requests from "../../api/requests";
@@ -110,17 +109,22 @@ const DetailPage = () => {
           <SimilarMovie>
             {similar.map((movie) => {
               const movieImageUrl = movie.poster_path
-                ? "https://image.tmdb.org/t/p/w200" + movie.poster_path
+                ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
                 : "img/alternativeImg.png";
               return (
-                <div key={movie.id}>
-                  <img src={movieImageUrl} alt={movie.name} />
-                  <h4>{movie.title}</h4>
-                  <p className="year">
-                    {(movie.first_air_date || movie.release_date)?.substr(0, 4)}
-                  </p>
-                  <p className="average">평균★{movie.vote_average}</p>
-                </div>
+                <Link to={`/movie/${movie.id}`}>
+                  <div key={movie.id}>
+                    <img src={movieImageUrl} alt={movie.name} />
+                    <h4>{movie.title}</h4>
+                    <p className="year">
+                      {(movie.first_air_date || movie.release_date)?.substr(
+                        0,
+                        4,
+                      )}
+                    </p>
+                    <p className="average">평균★{movie.vote_average}</p>
+                  </div>
+                </Link>
               );
             })}
           </SimilarMovie>
@@ -150,7 +154,7 @@ const SimilarMovieContainer = styled.div`
     margin: 0 auto;
   }
   p {
-    font-size: 16px;
+    font-size: 1rem;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
@@ -171,9 +175,10 @@ const MovieInfoContainer = styled.div`
 const CastlistContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
+  padding: 2rem;
   div {
-    width: 300px;
-    height: 80px;
+    width: 18.75rem;
+    height: 5rem;
   }
 `;
 
@@ -184,8 +189,8 @@ const CastInfoContainer = styled.div`
     object-fit: cover;
     /* width: 100%; */
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    width: 3.125rem;
+    height: 3.125rem;
   }
 `;
 
@@ -193,15 +198,15 @@ const MovieContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 56px;
+  margin-top: 3.5rem;
   padding: 2rem;
 `;
 
 const InnerContainer = styled.div`
   border: 1px solid #e5e5e5;
-  border-radius: 10px;
+  border-radius: 0.625rem;
   padding: 2rem;
-  margin-top: 56px;
+  margin-top: 3.5rem;
 `;
 
 const Container = styled.div`
