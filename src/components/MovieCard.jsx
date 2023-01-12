@@ -46,6 +46,12 @@ const List = styled.li`
 const MovieTitle = styled.span`
   font-size: 0.875rem;
 
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+
   ${tablet({
     fontSize: "0.8rem",
   })}
@@ -61,7 +67,7 @@ const Rate = styled.span`
   display: block;
   color: #5b5b5b;
   font-size: 0.8125rem;
-  padding: 0.125rem 0.5rem;
+  padding: 0.125rem 0.25rem;
   background-color: #e5e5e5;
   border-radius: 4px;
 

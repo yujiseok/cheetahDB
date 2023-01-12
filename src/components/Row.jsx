@@ -60,7 +60,7 @@ const Row = ({ title, fetchUrl }) => {
         {movies.map((movie, i) => {
           return (
             <Slide key={movie.id}>
-              <Link to="/movie/:movieId">
+              <Link to={`/movie/${movie.id}`}>
                 <ImgContainer>
                   <img
                     src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}

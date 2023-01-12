@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { MdOutlineAccountCircle, MdOutlineSearch } from "react-icons/md";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import ModalPortal from "./Modal/ModalPortal";
 import Modal from "./Modal/Modal";
@@ -13,6 +13,7 @@ const NavBar = () => {
   const [auth, setAuth] = useLocalStorage("auth", false);
   const [session, setSession] = useLocalStorage("session", null);
   const [userId, setUserId] = useLocalStorage("userId", "");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
 
@@ -32,6 +33,11 @@ const NavBar = () => {
     navigate("/");
   };
 
+  const handleChange = (e) => {
+    setSearchTerm(e.target.value);
+    navigate(`/search?q=${e.target.value}`);
+  };
+
   return (
     <StyledNav>
       <Container>
@@ -42,7 +48,12 @@ const NavBar = () => {
         <RightWrapper>
           <SearchWrapper>
             <MdOutlineSearch />
-            <SearchBar type="text" id="search" />
+            <SearchBar
+              type="text"
+              id="search"
+              value={searchTerm}
+              onChange={handleChange}
+            />
           </SearchWrapper>
           {auth && session ? (
             <>
