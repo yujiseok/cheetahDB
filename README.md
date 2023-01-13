@@ -1,4 +1,4 @@
-#[ TMDB](https://developers.themoviedb.org/3/getting-started/introduction)를 활용한 영화 검색 앱
+# [TMDB](https://developers.themoviedb.org/3/getting-started/introduction)를 활용한 영화 검색 앱
 
 ## [배포 주소](https://cheetahdb.vercel.app/)
 
