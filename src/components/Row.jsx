@@ -7,29 +7,7 @@ import { instance } from "../api/api";
 
 import "../global/slick-theme.css";
 import "../global/slick.css";
-
-const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
-  <TfiArrowCircleLeft
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...props}
-    className={`slick-prev slick-arrow${
-      currentSlide === 0 ? " slick-disabled" : ""
-    }`}
-    aria-hidden="true"
-    aria-disabled={currentSlide === 0}
-  />
-);
-const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
-  <TfiArrowCircleRight
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...props}
-    className={`slick-next slick-arrow${
-      currentSlide === slideCount - 1 ? " slick-disabled" : ""
-    }`}
-    aria-hidden="true"
-    aria-disabled={currentSlide === slideCount - 1}
-  />
-);
+import { SlickArrowLeft, SlickArrowRight } from "./SlickButton";
 
 const Row = ({ title, fetchUrl }) => {
   const [movies, setMovies] = useState([]);
@@ -46,7 +24,11 @@ const Row = ({ title, fetchUrl }) => {
 
   const fetchMovie = async () => {
     const response = await instance.get(fetchUrl);
-    setMovies(response.data.results);
+    setMovies(
+      response.data.results.filter((result) => {
+        return !result.name;
+      }),
+    );
   };
 
   useEffect(() => {
