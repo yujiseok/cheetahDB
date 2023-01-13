@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MdOutlineAccountCircle, MdOutlineSearch } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
@@ -14,8 +14,11 @@ const NavBar = () => {
   const [session, setSession] = useLocalStorage("session", null);
   const [userId, setUserId] = useLocalStorage("userId", "");
   const [searchTerm, setSearchTerm] = useState("");
+  const [show, setShow] = useState(false);
 
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const path = pathname.split("/")[1];
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -38,8 +41,23 @@ const NavBar = () => {
     navigate(`/search?q=${e.target.value}`);
   };
 
+  const listener = () => {
+    if (window.scrollY > 300) {
+      setShow(true);
+    } else {
+      setShow(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", listener);
+    return () => {
+      window.removeEventListener("scroll", listener);
+    };
+  }, []);
+
   return (
-    <StyledNav>
+    <StyledNav path={path} show={show}>
       <Container>
         <Logo>
           <Link to="/">CheetahDB</Link>
@@ -91,13 +109,16 @@ export default NavBar;
 
 const StyledNav = styled.nav`
   width: 100%;
-  background-color: #fff;
+  background-color: ${({ path, show }) =>
+    path === "movie" && !show ? "transparent" : "#fff"};
   height: 60px;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 10;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: ${({ path, show }) =>
+    path === "movie" && !show ? "none" : "1px solid #e5e5e5"};
+  transition: all 0.3s;
 `;
 
 const Container = styled.div`
