@@ -7,27 +7,7 @@ import { instance } from "../api/api";
 
 import "../global/slick-theme.css";
 import "../global/slick.css";
-
-const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
-  <TfiArrowCircleLeft
-    {...props}
-    className={`slick-prev slick-arrow${
-      currentSlide === 0 ? " slick-disabled" : ""
-    }`}
-    aria-hidden="true"
-    aria-disabled={currentSlide === 0}
-  />
-);
-const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
-  <TfiArrowCircleRight
-    {...props}
-    className={`slick-next slick-arrow${
-      currentSlide === slideCount - 1 ? " slick-disabled" : ""
-    }`}
-    aria-hidden="true"
-    aria-disabled={currentSlide === slideCount - 1}
-  />
-);
+import { SlickArrowLeft, SlickArrowRight } from "./SlickButton";
 
 const Row = ({ title, fetchUrl }) => {
   const [movies, setMovies] = useState([]);
@@ -44,8 +24,11 @@ const Row = ({ title, fetchUrl }) => {
 
   const fetchMovie = async () => {
     const response = await instance.get(fetchUrl);
-    setMovies(response.data.results);
-    console.log(response.data.results);
+    setMovies(
+      response.data.results.filter((result) => {
+        return !result.name;
+      }),
+    );
   };
 
   useEffect(() => {
@@ -73,7 +56,9 @@ const Row = ({ title, fetchUrl }) => {
                   <p className="year">
                     {(movie.first_air_date || movie.release_date)?.substr(0, 4)}
                   </p>
-                  <p className="average">평균★{movie.vote_average}</p>
+                  <p className="average">
+                    평균★{Math.round(movie.vote_average * 100) / 100}
+                  </p>
                 </Info>
               </Link>
             </Slide>
